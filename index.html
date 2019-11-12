@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>返回APP首页</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <script type="text/javascript" src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
+    <script>
+    // 初始化
+    var vConsole = new VConsole();
+    console.log('Hello world');
+    </script>
+</head>
+
+<body>
+    <button onclick="setNavbarLeftClose()">返回</button>
+    <button onclick="console.log('测试onclick')">点击</button>
+    <script>
+    setNavbarLeftClose = function(callback) {
+        console.log("返回")
+        callAppMethod("xn_setNavbarLeftClose", function(data) {
+            callback(data);
+        });
+    };
+
+    var doc = document;
+    _createQueueReadyIframe(doc);
+    var readyEvent = doc.createEvent('Events');
+    readyEvent.initEvent('WebViewJavascriptBridgeReady');
+    readyEvent.bridge = WebViewJavascriptBridge;
+    doc.dispatchEvent(readyEvent);
+    var callAppMethod = function(methodName, callback, data) {
+        if (window.WebViewJavascriptBridge) {
+            connectWebViewJavascriptBridge(WebViewJavascriptBridge, methodName, callback)
+        } else {
+            document.addEventListener('WebViewJavascriptBridgeReady', function() {
+                connectWebViewJavascriptBridge(WebViewJavascriptBridge, methodName, callback)
+            }, false)
+        }
+
+        function connectWebViewJavascriptBridge(bridge, methodName, callback) {
+            if (flag) {
+                bridge.init(function(methodName, callback) {});
+                flag = false;
+            }
+            bridge.callHandler(methodName, data, function(response) {
+                callback(response);
+            })
+
+        }
+    };
+
+    window.WebViewJavascriptBridge = {
+        init: init,
+        send: send,
+        registerHandler: registerHandler,
+        callHandler: callHandler,
+        _fetchQueue: _fetchQueue,
+        _handleMessageFromObjC: _handleMessageFromObjC
+    };
+    </script>
+</body>
+
+</html>
