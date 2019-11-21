@@ -2,7 +2,7 @@
  * Created by DEV005 on 2017/5/5.
  */
 !function (a, b) {
-  // module.exports = b(a)
+  module.exports = b(a)
   /*  const wx = require('weixin-js-sdk')
 
    const plugin = {
